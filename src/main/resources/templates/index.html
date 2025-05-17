@@ -1,57 +1,163 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="no">
 <head>
-  <meta charset="UTF-8">
-  <title>Kjørebok</title>
-  <link rel="stylesheet" th:href="@{/styles.css}" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Min kjøregodtgjørelse</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#0d6efd" />
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+      background: url('/images/car.png') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+    }
+    .overlay {
+      background-color: rgba(0, 0, 0, 0.7); /* mørk transparent bakgrunn for lesbarhet */
+      min-height: 100vh;
+      padding: 20px;
+    }
+    table {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+  </style>
+
+
+
 </head>
 <body>
-<h1>Kjørebok</h1>
+<div class="overlay container">
+  <h1 class="mb-4">Registrer tur</h1>
 
-<!-- Skjema for å legge til ny kjøretur -->
-<form action="#" th:action="@{/lagre}" th:object="${kjoring}" method="post">
-  <label for="dato">Dato:</label>
-  <input type="date" id="dato" th:field="*{dato}" required />
-  <br/>
-  <label for="fra">Fra:</label>
-  <input type="text" id="fra" th:field="*{fra}" required />
-  <br/>
-  <label for="til">Til:</label>
-  <input type="text" id="til" th:field="*{til}" required />
-  <br/>
-  <label for="km">Kilometer:</label>
-  <input type="number" step="0.1" id="km" th:field="*{kilometer}" required />
-  <br/>
-  <button type="submit">Lagre</button>
-</form>
+  <form th:action="@{/lagreTur}" th:object="${nyTur}" method="post" class="needs-validation" novalidate>
+    <div class="row g-3">
 
-<hr/>
+      <div class="col-md-4">
+        <label for="dato" class="form-label">Dato</label>
+        <input type="date" th:field="*{dato}" id="dato" class="form-control" required />
+        <div class="invalid-feedback">Dato er påkrevd.</div>
+      </div>
 
-<!-- Oversikt over registrerte turer -->
-<h2>Mine turer</h2>
-<table border="1">
-  <thead>
-  <tr>
-    <th>Dato</th>
-    <th>Fra</th>
-    <th>Til</th>
-    <th>Km</th>
-    <th>Godtgjørelse (kr)</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr th:each="tur : ${alleTurer}">
-    <td th:text="${tur.dato}"></td>
-    <td th:text="${tur.fra}"></td>
-    <td th:text="${tur.til}"></td>
-    <td th:text="${tur.kilometer}"></td>
-    <td th:text="${#numbers.formatDecimal(tur.kilometer * 4.48, 1, 'COMMA', 2, 'POINT')}"></td>
-  </tr>
-  </tbody>
-</table>
+      <div class="col-md-4">
+        <label for="fraAdresse" class="form-label">Fra adresse</label>
+        <input type="text" th:field="*{fraAdresse}" id="fraAdresse" class="form-control" required />
+        <div class="invalid-feedback">Fra adresse er påkrevd.</div>
+      </div>
 
-<h3>Total godtgjørelse:
-  <span th:text="${#numbers.formatDecimal(total, 1, 'COMMA', 2, 'POINT')} + ' kr'"></span>
-</h3>
+      <div class="col-md-4">
+        <label for="tilAdresse" class="form-label">Til adresse</label>
+        <input type="text" th:field="*{tilAdresse}" id="tilAdresse" class="form-control" required />
+        <div class="invalid-feedback">Til adresse er påkrevd.</div>
+      </div>
+
+      <div class="col-md-6">
+        <label for="formål" class="form-label">Formål</label>
+        <input type="text" th:field="*{formål}" id="formål" class="form-control" />
+      </div>
+
+      <div class="col-md-6">
+        <label for="biltype" class="form-label">Biltype</label>
+        <select th:field="*{biltype}" id="biltype" class="form-select">
+          <option value="Elbil">Elbil</option>
+          <option value="Bensin">Bensin</option>
+          <option value="Diesel">Diesel</option>
+          <option value="Annet">Annet</option>
+        </select>
+      </div>
+
+      <div class="col-md-4">
+        <label for="kilometer" class="form-label">Kilometer</label>
+        <input type="number" step="0.1" th:field="*{kilometer}" id="kilometer" class="form-control" required />
+        <div class="invalid-feedback">Kilometer er påkrevd.</div>
+      </div>
+
+      <div class="col-md-4 d-flex align-items-center">
+        <div class="form-check mt-4">
+          <input type="checkbox" th:field="*{passasjer}" id="passasjer" class="form-check-input" />
+          <label class="form-check-label" for="passasjer">Passasjer</label>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <label for="bomavgift" class="form-label">Bomavgift</label>
+        <input type="number" step="0.01" th:field="*{bomavgift}" id="bomavgift" class="form-control" />
+      </div>
+
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">Lagre tur</button>
+  </form>
+
+  <h2 class="mt-5 mb-3">Registrerte turer</h2>
+
+  <div class="table-responsive">
+    <table class="table table-striped table-bordered align-middle">
+      <thead class="table-light">
+      <tr>
+        <th>Dato</th>
+        <th>Fra</th>
+        <th>Til</th>
+        <th>Formål</th>
+        <th>Biltype</th>
+        <th>Km</th>
+        <th>Passasjer</th>
+        <th>Bomavgift</th>
+        <th>Beløp</th>
+        <th>Slett</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="tur : ${turer}">
+        <td th:text="${tur.dato}"></td>
+        <td class="text-truncate" style="max-width:120px;" th:text="${tur.fraAdresse}"></td>
+        <td class="text-truncate" style="max-width:120px;" th:text="${tur.tilAdresse}"></td>
+        <td class="text-truncate" style="max-width:150px;" th:text="${tur.formål}"></td>
+        <td th:text="${tur.biltype}"></td>
+        <td th:text="${tur.kilometer}"></td>
+        <td th:text="${tur.passasjer} ? 'Ja' : 'Nei'"></td>
+        <td th:text="${tur.bomavgift}"></td>
+        <td th:text="${tur.belop}"></td>
+        <td>
+          <form th:action="@{/slettTur/{id}(id=${tur.id})}" method="post"
+                onsubmit="return confirm('Er du sikker på at du vil slette denne turen?');">
+            <button type="submit" class="btn btn-danger btn-sm">Slett</button>
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+  <!-- Bootstrap JS + Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  // Enkel klient-validering
+  (() => {
+    'use strict';
+    const forms = document.querySelectorAll('.needs-validation');
+    Array.from(forms).forEach(form => {
+      form.addEventListener('submit', event => {
+        if (!form.checkValidity()) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+  })();
+</script>
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/service-worker.js')
+      .then(() => console.log('Service Worker registrert'));
+  }
+</script>
+
 </body>
 </html>
