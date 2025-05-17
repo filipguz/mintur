@@ -1,14 +1,13 @@
-# Bruk offisiell OpenJDK 17 image som base
-FROM eclipse-temurin:17-jdk-alpine
-
-# Sett arbeidsmappe i containeren
+# Stage 1: Bygg Java-appen
+FROM maven:3.9.6-eclipse-temurin-17 AS build
 WORKDIR /app
+COPY pom.xml .
+COPY src ./src
+RUN mvn clean package -DskipTests
 
-# Kopier ferdig bygget jar-fil inn i containeren
-COPY target/*.jar app.jar
-
-# Eksponer porten applikasjonen kjører på (standard Spring Boot port)
+# Stage 2: Kjør .jar-fila
+FROM eclipse-temurin:17-jdk-alpine
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8080
-
-# Kommando for å starte applikasjonen
 ENTRYPOINT ["java", "-jar", "app.jar"]
