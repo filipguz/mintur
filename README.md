@@ -1,22 +1,37 @@
-Kjørebok-applikasjon
+🛠️ Hvordan prosjektet er laget
 
-Dette prosjektet er under utvikling og skal bli en enkel applikasjon for registrering av kjøreturer og beregning av kjøregodtgjørelse.
-Status
+Dette prosjektet er en fullstack webapplikasjon kalt MinTur, laget for å planlegge reiser. Den er utviklet med moderne og velkjente teknologier og følger beste praksis innen webutvikling.
+1. Backend – Java & Spring Boot
 
-    Prosjektet er ikke ferdig enda.
+    Spring Boot brukes som rammeverk for å bygge RESTful API-er og koble frontend til databasen.
 
-    Grunnleggende funksjonalitet for å legge til og vise kjøreturer er under implementering.
+    Spring Data JPA brukes for å jobbe med databasen via objekter (ORM).
 
-    Bruker Java, Spring Boot og Thymeleaf for backend og frontend.
+    Hibernate tar seg av mappingen mellom Java-klasser og tabeller i databasen.
 
-    Hensikten er å lære og bygge en fungerende kjørebok-applikasjon.
+    Applikasjonen er konfigurert via application.properties.
 
-Hva jeg jobber med nå
+2. Frontend – HTML + Bootstrap
 
-    Lage controller, service og repository lag
+    Brukergrensesnittet er laget med HTML5 og Bootstrap 5 for responsivt design.
 
-    Bygge frontend med Thymeleaf for å registrere og vise turer
+    Brukeren kan se, legge inn eller redigere reiser via enkle og brukervennlige skjema.
 
-    Beregne total kjøregodtgjørelse automatisk
+3. Database – PostgreSQL på Render
 
-    Holde prosjektet enkelt og oversiktlig
+    En PostgreSQL-database er opprettet via Render sin database-integrasjon.
+
+    Spring Boot kobles til databasen via JDBC og application.properties.
+
+    Hibernate sørger for at nødvendige tabeller blir opprettet automatisk (ddl-auto=update).
+
+4. Docker – Bygg og deploy
+
+    Applikasjonen er containerisert med Docker:
+
+        Første steg bygger .jar-filen med Maven.
+
+        Andre steg lager en lettvekts container som kjører Spring Boot-applikasjonen.
+
+    Dockerfilen gjør det enkelt å deploye hvor som helst (Render, Oracle Cloud, AWS, m.m.).
+
