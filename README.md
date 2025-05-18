@@ -1,6 +1,6 @@
 🛠️ Hvordan prosjektet er laget
 
-Dette prosjektet er en fullstack webapplikasjon kalt MinTur, laget for å planlegge reiser. Den er utviklet med moderne og velkjente teknologier og følger beste praksis innen webutvikling.
+Dette prosjektet er en fullstack webapplikasjon kalt MinTur, laget for å planlegge reiser / registrere for kjøregodtgjørelse. 
 1. Backend – Java & Spring Boot
 
     Spring Boot brukes som rammeverk for å bygge RESTful API-er og koble frontend til databasen.
@@ -15,7 +15,7 @@ Dette prosjektet er en fullstack webapplikasjon kalt MinTur, laget for å planle
 
     Brukergrensesnittet er laget med HTML5 og Bootstrap 5 for responsivt design.
 
-    Brukeren kan se, legge inn eller redigere reiser via enkle og brukervennlige skjema.
+    Brukeren kan se, legge inn eller slette reiser via enkle og brukervennlige skjema.
 
 3. Database – PostgreSQL på Render
 
